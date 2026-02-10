@@ -9,7 +9,7 @@ export const usePostHog = async () => {
 
   if (!posthog) {
     const PostHog = (await import('posthog-node')).PostHog;
-    posthog = new PostHog(config.publicKey, { host: config.host });
+    posthog = new PostHog(config.key, { host: config.host });
   }
 
   return posthog;

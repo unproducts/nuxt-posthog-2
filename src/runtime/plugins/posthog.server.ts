@@ -18,7 +18,7 @@ export default defineNuxtPlugin({
 
     const PostHog = (await import('posthog-node')).PostHog;
 
-    const posthog = new PostHog(config.publicKey, { host: config.host });
+    const posthog = new PostHog(config.key, { host: config.host });
     await posthog.reloadFeatureFlags();
 
     const identity = useCookie('ph-identify', { default: () => '' });

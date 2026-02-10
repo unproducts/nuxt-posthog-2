@@ -41,7 +41,7 @@ export default defineNuxtPlugin({
       clientOptions.api_host = `${window.location.origin}/ingest/ph`;
     }
 
-    const posthogClient = posthog.init(config.publicKey, clientOptions);
+    const posthogClient = posthog.init(config.key, clientOptions);
 
     const identity = useCookie('ph-identify');
     identity.value = posthog.get_distinct_id();

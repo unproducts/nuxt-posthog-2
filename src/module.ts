@@ -18,7 +18,7 @@ export interface ModuleOptions {
    * @type string
    * @docs https://posthog.com/docs/api
    */
-  publicKey: string;
+  key: string;
 
   /**
    * The PostHog API host
@@ -92,7 +92,7 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: 'posthog',
   },
   defaults: {
-    publicKey: process.env.POSTHOG_API_KEY as string,
+    key: process.env.POSTHOG_API_KEY as string,
     host: process.env.POSTHOG_API_HOST as string,
     capturePageViews: true,
     capturePageLeaves: true,
@@ -104,14 +104,14 @@ export default defineNuxtModule<ModuleOptions>({
   setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url);
 
-    if (!options.publicKey || !options.host) {
+    if (!options.key || !options.host) {
       options.disabled = true;
     } else if (!options.disabled) {
       // Only set runtime config if not disabled
       nuxt.options.runtimeConfig.public.posthog = defu<ModuleOptions, ModuleOptions[]>(
         nuxt.options.runtimeConfig.public.posthog,
         {
-          publicKey: options.publicKey,
+          key: options.key,
           host: options.host,
           capturePageViews: options.capturePageViews,
           capturePageLeaves: options.capturePageLeaves,
