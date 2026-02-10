@@ -1,4 +1,16 @@
 
+## v2.0.4
+
+[compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.3...v2.0.4)
+
+### 🏡 Chore
+
+- Simplified keys ([0d5b365](https://github.com/unproducts/nuxt-posthog-2/commit/0d5b365))
+
+### ❤️ Contributors
+
+- Aman Desai <amandesai01@gmail.com>
+
 ## v2.0.3
 
 [compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.2...v2.0.3)
