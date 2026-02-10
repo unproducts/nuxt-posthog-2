@@ -1,4 +1,16 @@
 
+## v2.0.2
+
+[compare changes](https://github.com/unproducts/nuxt-posthog/compare/v2.0.1...v2.0.2)
+
+### 🏡 Chore
+
+- Lint ([2c6d709](https://github.com/unproducts/nuxt-posthog/commit/2c6d709))
+
+### ❤️ Contributors
+
+- Aman Desai <amandesai01@gmail.com>
+
 ## v2.0.1
 
 [compare changes](https://github.com/unproducts/nuxt-posthog/compare/v2.0.0...v2.0.1)

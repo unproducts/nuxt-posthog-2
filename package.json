@@ -1,7 +1,8 @@
 {
   "name": "@unproducts/nuxt-posthog",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "PostHog module for nuxt",
+  "private": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/unproducts/nuxt-posthog.git"
