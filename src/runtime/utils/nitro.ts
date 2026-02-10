@@ -1,10 +1,16 @@
 import { useRuntimeConfig } from '#imports';
-import { PostHog } from 'posthog-node';
+import type { PostHog } from 'posthog-node';
 
-export const usePostHog = () => {
+let posthog: PostHog | null = null;
+export const usePostHog = async () => {
   const config = useRuntimeConfig().public.posthog;
+  const runtimeConfig = useRuntimeConfig().posthog;
+  if (!config || !runtimeConfig.server) return;
 
-  if (config.disabled || config.publicKey.length === 0) return;
+  if (!posthog) {
+    const PostHog = (await import('posthog-node')).PostHog;
+    posthog = new PostHog(config.publicKey, { host: config.host });
+  }
 
-  return new PostHog(config.publicKey, { host: config.host });
+  return posthog;
 };

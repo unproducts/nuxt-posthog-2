@@ -1,5 +1,5 @@
 import { defineNuxtPlugin, useCookie, useRuntimeConfig, useState } from '#app';
-import { PostHog } from 'posthog-node';
+import type { PostHog } from 'posthog-node';
 import type { JsonType } from 'posthog-js';
 
 export default defineNuxtPlugin({
@@ -7,19 +7,16 @@ export default defineNuxtPlugin({
   enforce: 'pre',
   setup: async () => {
     const config = useRuntimeConfig().public.posthog;
+    const runtimeConfig = useRuntimeConfig().posthog;
 
-    if (config.disabled)
+    if (!config || !runtimeConfig.server)
       return {
         provide: {
           serverPosthog: null as PostHog | null,
         },
       };
 
-    if (config.publicKey.length === 0) {
-      // PostHog public key is not defined. Skipping PostHog setup.
-      // User has already been warned on dev startup
-      return {};
-    }
+    const PostHog = (await import('posthog-node')).PostHog;
 
     const posthog = new PostHog(config.publicKey, { host: config.host });
     await posthog.reloadFeatureFlags();

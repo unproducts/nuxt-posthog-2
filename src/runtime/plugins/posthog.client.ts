@@ -1,20 +1,24 @@
-import { defineNuxtPlugin, useCookie, useRouter, useRuntimeConfig, useState } from '#app';
-import { posthog, type PostHog, type JsonType, type PostHogConfig } from 'posthog-js';
+import { defineNuxtPlugin, useCookie, useRouter, useRuntimeConfig, useState, useNuxtApp } from '#app';
+import type { PostHog, JsonType, PostHogConfig } from 'posthog-js';
 import { defu } from 'defu';
 
 export default defineNuxtPlugin({
   name: 'posthog',
   enforce: 'pre',
   setup: async () => {
+    console.log('setup posthog client');
+    const runtimeConfig = useRuntimeConfig().posthog;
     const config = useRuntimeConfig().public.posthog;
 
-    if (config.disabled)
+    if (!config || !runtimeConfig.client)
       return {
         provide: {
           posthog: 'Deprecated: use $clientPosthog instead.' as const,
           clientPosthog: null as PostHog | null,
         },
       };
+
+    const posthog = (await import('posthog-js')).posthog;
 
     const posthogFeatureFlags = useState<Record<string, boolean | string> | undefined>('ph-feature-flags');
     const posthogFeatureFlagPayloads = useState<Record<string, JsonType> | undefined>('ph-feature-flag-payloads');

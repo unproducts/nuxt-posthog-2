@@ -1,8 +1,12 @@
 import { useNuxtApp } from '#app';
+import type { PostHog } from 'posthog-js';
 import type { ObjectDirective, FunctionDirective } from 'vue';
 
 const directive: FunctionDirective<HTMLElement, PostHogCaptureEvent | string> = (el, { value, arg }) => {
-  const { $clientPosthog } = useNuxtApp();
+  const nuxtApp = useNuxtApp();
+
+  const $clientPosthog = nuxtApp.$clientPosthog as PostHog | undefined;
+  if (!$clientPosthog) return;
 
   if (el.hasAttribute('posthog-listener')) return;
 

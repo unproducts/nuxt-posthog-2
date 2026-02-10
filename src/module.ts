@@ -64,6 +64,20 @@ export interface ModuleOptions {
   disabled?: boolean;
 
   /**
+   * If set to true, the module will be enabled on the client side.
+   * @default true
+   * @type boolean
+   */
+  client?: boolean;
+
+  /**
+   * If set to true, the module will be enabled on the server side.
+   * @default true
+   * @type boolean
+   */
+  server?: boolean;
+
+  /**
    * If set to true, PostHog will be proxied through the Nuxt server.
    * @default false
    * @type boolean
@@ -83,40 +97,48 @@ export default defineNuxtModule<ModuleOptions>({
     capturePageViews: true,
     capturePageLeaves: true,
     disabled: false,
+    client: true,
+    server: true,
     proxy: false,
   },
   setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url);
 
-    // Public runtimeConfig
-    nuxt.options.runtimeConfig.public.posthog = defu<ModuleOptions, ModuleOptions[]>(
-      nuxt.options.runtimeConfig.public.posthog,
-      {
-        publicKey: options.publicKey,
-        host: options.host,
-        capturePageViews: options.capturePageViews,
-        capturePageLeaves: options.capturePageLeaves,
-        clientOptions: options.clientOptions,
-        disabled: options.disabled,
-        proxy: options.proxy,
-      },
-    );
+    if (!options.publicKey || !options.host) {
+      options.disabled = true;
+    } else if (!options.disabled) {
+      // Only set runtime config if not disabled
+      nuxt.options.runtimeConfig.public.posthog = defu<ModuleOptions, ModuleOptions[]>(
+        nuxt.options.runtimeConfig.public.posthog,
+        {
+          publicKey: options.publicKey,
+          host: options.host,
+          capturePageViews: options.capturePageViews,
+          capturePageLeaves: options.capturePageLeaves,
+          clientOptions: options.clientOptions,
+          proxy: options.proxy,
+        },
+      );
+
+      nuxt.options.runtimeConfig.posthog = defu<Pick<ModuleOptions, 'client' | 'server'>, Pick<ModuleOptions, 'client' | 'server'>[]>(
+        nuxt.options.runtimeConfig.posthog,
+        {
+          client: !!options.client,
+          server: !!options.server,
+        },
+      );
+    }
 
     const config = nuxt.options.runtimeConfig.public.posthog;
 
-    // Make sure url and key are set
-    const enabled = !config.disabled;
-    if (enabled && !config.publicKey) {
-      console.warn('Missing PostHog API public key, set it either in `nuxt.config.ts` or via env variable');
-    }
-    if (enabled && !config.host) {
-      console.warn('Missing PostHog API host, set it either in `nuxt.config.ts` or via env variable');
-    }
-
     // Setup proxy
-    if (enabled && config.proxy && config.host) {
+    if (config && config.proxy) {
       const url = new URL(config.host);
       const region = url.hostname.split('.')[0];
+
+      if (!region) {
+        throw new Error('Invalid PostHog API host when setting proxy');
+      }
 
       if (!['eu', 'us'].includes(region)) {
         throw new Error(`Invalid PostHog API host when setting proxy, expected 'us' or 'eu', got '${region}'`);

@@ -1,10 +1,10 @@
 {
-  "name": "nuxt-posthog",
+  "name": "@unproducts/nuxt-posthog",
   "version": "1.6.3",
   "description": "PostHog module for nuxt",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mitjans/nuxt-posthog.git"
+    "url": "git+https://github.com/unproducts/nuxt-posthog.git"
   },
   "license": "MIT",
   "type": "module",
@@ -33,7 +33,9 @@
   },
   "dependencies": {
     "@nuxt/kit": "^4.2.1",
-    "defu": "^6.1.4",
+    "defu": "^6.1.4"
+  },
+  "peerDependencies": {
     "posthog-js": "^1.252.0",
     "posthog-node": "5.14.0"
   },
