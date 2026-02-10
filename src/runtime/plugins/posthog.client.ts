@@ -1,4 +1,4 @@
-import { defineNuxtPlugin, useCookie, useRouter, useRuntimeConfig, useState, useNuxtApp } from '#app';
+import { defineNuxtPlugin, useCookie, useRouter, useRuntimeConfig, useState } from '#app';
 import type { PostHog, JsonType, PostHogConfig } from 'posthog-js';
 import { defu } from 'defu';
 

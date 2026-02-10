@@ -120,13 +120,13 @@ export default defineNuxtModule<ModuleOptions>({
         },
       );
 
-      nuxt.options.runtimeConfig.posthog = defu<Pick<ModuleOptions, 'client' | 'server'>, Pick<ModuleOptions, 'client' | 'server'>[]>(
-        nuxt.options.runtimeConfig.posthog,
-        {
-          client: !!options.client,
-          server: !!options.server,
-        },
-      );
+      nuxt.options.runtimeConfig.posthog = defu<
+        Pick<ModuleOptions, 'client' | 'server'>,
+        Pick<ModuleOptions, 'client' | 'server'>[]
+      >(nuxt.options.runtimeConfig.posthog, {
+        client: !!options.client,
+        server: !!options.server,
+      });
     }
 
     const config = nuxt.options.runtimeConfig.public.posthog;

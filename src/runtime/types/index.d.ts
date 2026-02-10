@@ -5,6 +5,9 @@ declare module '@nuxt/schema' {
     posthog: Pick<ModuleOptions, 'client' | 'server'>;
   }
   interface PublicRuntimeConfig {
-    posthog?: Pick<ModuleOptions, 'publicKey' | 'host' | 'capturePageViews' | 'capturePageLeaves' | 'clientOptions' | 'proxy'>;
+    posthog?: Pick<
+      ModuleOptions,
+      'publicKey' | 'host' | 'capturePageViews' | 'capturePageLeaves' | 'clientOptions' | 'proxy'
+    >;
   }
 }
