@@ -2,10 +2,12 @@
   "name": "@unproducts/nuxt-posthog",
   "version": "2.0.2",
   "description": "PostHog module for nuxt",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/unproducts/nuxt-posthog.git"
+    "url": "git+https://github.com/unproducts/nuxt-posthog-2.git"
   },
   "license": "MIT",
   "type": "module",
@@ -23,7 +25,6 @@
   },
   "scripts": {
     "prepack": "nuxt-module-build build",
-    "postinstall": "nuxt prepare",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
