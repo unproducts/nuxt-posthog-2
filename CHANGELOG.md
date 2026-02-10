@@ -1,4 +1,16 @@
 
+## v2.0.3
+
+[compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.2...v2.0.3)
+
+### 🩹 Fixes
+
+- Prepare ([7a5604e](https://github.com/unproducts/nuxt-posthog-2/commit/7a5604e))
+
+### ❤️ Contributors
+
+- Aman Desai <amandesai01@gmail.com>
+
 ## v2.0.2
 
 [compare changes](https://github.com/unproducts/nuxt-posthog/compare/v2.0.1...v2.0.2)
