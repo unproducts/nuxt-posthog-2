@@ -24,17 +24,10 @@ export default defineNuxtPlugin({
 
     const posthog = (await import('posthog-js')).posthog;
 
-    const posthogFeatureFlags = useState<Record<string, boolean | string> | undefined>('ph-feature-flags');
-    const posthogFeatureFlagPayloads = useState<Record<string, JsonType> | undefined>('ph-feature-flag-payloads');
-
     const clientOptions = defu<PostHogConfig, Partial<PostHogConfig>[]>(config.clientOptions ?? {}, {
       api_host: config.host,
       capture_pageview: false,
       capture_pageleave: !!config.capturePageLeaves,
-      bootstrap: {
-        featureFlags: posthogFeatureFlags.value,
-        featureFlagPayloads: posthogFeatureFlagPayloads.value,
-      },
     });
 
     if (config.proxy && config.host) {
@@ -46,7 +39,6 @@ export default defineNuxtPlugin({
     }
 
     const posthogClient = posthog.init(config.key, clientOptions);
-
     nuxtApp.callHook('posthog:init', posthogClient);
 
     if (config.capturePageViews) {
@@ -59,14 +51,6 @@ export default defineNuxtPlugin({
         });
       });
     }
-
-    posthog.onFeatureFlags((flags, featureFlags) => {
-      posthogFeatureFlags.value = featureFlags;
-      posthogFeatureFlagPayloads.value = flags.reduce<Record<string, JsonType>>((acc, flag) => {
-        acc[flag] = posthog.getFeatureFlagPayload(flag);
-        return acc;
-      }, {});
-    });
 
     return {
       provide: {
