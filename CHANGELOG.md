@@ -1,4 +1,17 @@
 
+## v2.0.5
+
+[compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.4...v2.0.5)
+
+### 🩹 Fixes
+
+- Config driven ([c163509](https://github.com/unproducts/nuxt-posthog-2/commit/c163509))
+- Lint ([0a4bfa8](https://github.com/unproducts/nuxt-posthog-2/commit/0a4bfa8))
+
+### ❤️ Contributors
+
+- Aman Desai <amandesai01@gmail.com>
+
 ## v2.0.4
 
 [compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.3...v2.0.4)
