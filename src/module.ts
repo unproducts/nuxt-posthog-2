@@ -1,12 +1,4 @@
-import {
-  defineNuxtModule,
-  addComponent,
-  addPlugin,
-  createResolver,
-  addTypeTemplate,
-  addServerPlugin,
-  addServerImports,
-} from '@nuxt/kit';
+import { defineNuxtModule, addPlugin, createResolver, addServerImports } from '@nuxt/kit';
 import type { PostHogConfig as PostHogClientOptions } from 'posthog-js';
 import type { PostHogOptions as PostHogServerOptions } from 'posthog-node';
 import { defu } from 'defu';
@@ -156,37 +148,13 @@ export default defineNuxtModule<ModuleOptions>({
       };
     }
 
-    nuxt.hook('imports:dirs', (dirs) => {
-      dirs.push(resolve('./runtime/composables'));
-    });
-
-    addPlugin(resolve('./runtime/plugins/directives'));
     addPlugin(resolve('./runtime/plugins/posthog.client'));
-    addPlugin(resolve('./runtime/plugins/posthog.server'));
 
-    addComponent({
-      filePath: resolve('./runtime/components/PostHogFeatureFlag.vue'),
-      name: 'PostHogFeatureFlag',
-    });
-    addTypeTemplate({
-      filename: 'types/posthog-directives.d.ts',
-      src: resolve('./runtime/types/directives.d.ts'),
-    });
-
-    addServerPlugin(resolve('./runtime/plugins/nitro'));
     addServerImports([
       {
         from: resolve('./runtime/utils/nitro'),
         name: 'usePostHog',
       },
     ]);
-
-    addTypeTemplate(
-      {
-        filename: 'types/posthog-nitro.d.ts',
-        src: resolve('./runtime/types/nitro.d.ts'),
-      },
-      { nitro: true },
-    );
   },
 });

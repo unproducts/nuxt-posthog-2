@@ -1,11 +1,11 @@
-import { defineNuxtPlugin, useCookie, useRouter, useRuntimeConfig, useState } from '#app';
+import { defineNuxtPlugin, useRouter, useRuntimeConfig, useState } from '#app';
 import type { PostHog, JsonType, PostHogConfig } from 'posthog-js';
 import { defu } from 'defu';
 
 export default defineNuxtPlugin({
   name: 'posthog',
   enforce: 'post',
-  setup: async () => {
+  setup: async (nuxtApp) => {
     const config = useRuntimeConfig().public.posthog;
 
     if (!config?.client)
@@ -47,8 +47,7 @@ export default defineNuxtPlugin({
 
     const posthogClient = posthog.init(config.key, clientOptions);
 
-    const identity = useCookie('ph-identify');
-    identity.value = posthog.get_distinct_id();
+    nuxtApp.callHook('posthog:init', posthogClient);
 
     if (config.capturePageViews) {
       // Make sure that pageviews are captured with each route change

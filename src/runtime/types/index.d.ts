@@ -1,4 +1,6 @@
 import type { ModuleOptions } from '../../module';
+import type { HookResult } from 'nuxt/schema';
+import type { PostHog } from 'posthog-js';
 
 declare module '@nuxt/schema' {
   /** Server-only config (private). Key/host live in public only; Nitro usePostHog reads serverOptions here. */
@@ -16,5 +18,12 @@ declare module '@nuxt/schema' {
     > & {
       client: boolean;
     };
+  }
+}
+
+declare module '#app' {
+  /** Custom runtime hook used by nuxtApp.hook('posthog:init', ...) */
+  interface RuntimeNuxtHooks {
+    'posthog:init': (posthog: PostHog | null) => HookResult;
   }
 }
