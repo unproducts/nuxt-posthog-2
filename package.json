@@ -39,7 +39,7 @@
   },
   "peerDependencies": {
     "posthog-js": "^1.252.0",
-    "posthog-node": "5.14.0"
+    "posthog-node": "^5.14.0"
   },
   "devDependencies": {
     "@nuxt/devtools": "^3.1.1",
