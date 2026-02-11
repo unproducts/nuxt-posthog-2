@@ -18,7 +18,7 @@ export default defineNuxtPlugin({
 
     if (!config.key || !config.host) {
       throw new Error(
-        'PostHog client is enabled but key or host not found. Set client to false in module options to disable.'
+        'PostHog client is enabled but key or host not found. Set client to false in module options to disable.',
       );
     }
 

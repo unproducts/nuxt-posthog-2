@@ -107,10 +107,7 @@ export default defineNuxtModule<ModuleOptions>({
     const { resolve } = createResolver(import.meta.url);
 
     // Single source of truth: key and host only in public config (from env via options or runtimeConfig.public.posthog)
-    const mergedKeyHost = defu(
-      nuxt.options.runtimeConfig.public.posthog,
-      { key: options.key, host: options.host }
-    );
+    const mergedKeyHost = defu(nuxt.options.runtimeConfig.public.posthog, { key: options.key, host: options.host });
 
     if (options.server) {
       // Server-relevant options (private) — Nitro usePostHog reads serverOptions here; key/host from public

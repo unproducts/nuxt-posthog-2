@@ -17,7 +17,7 @@ export default defineNuxtPlugin({
 
     if (!publicConfig.key || !publicConfig.host) {
       throw new Error(
-        'PostHog client (SSR) is enabled but key or host not found. Set client to false in module options to disable.'
+        'PostHog client (SSR) is enabled but key or host not found. Set client to false in module options to disable.',
       );
     }
 
