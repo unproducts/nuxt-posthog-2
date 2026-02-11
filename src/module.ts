@@ -68,14 +68,14 @@ export interface ModuleOptions {
 
   /**
    * If set to true, the module will be enabled on the client side.
-   * @default true
+   * @default false
    * @type boolean
    */
   client?: boolean;
 
   /**
    * If set to true, the module will be enabled on the server side.
-   * @default true
+   * @default false
    * @type boolean
    */
   server?: boolean;
@@ -99,8 +99,8 @@ export default defineNuxtModule<ModuleOptions>({
     host: process.env.POSTHOG_API_HOST as string,
     capturePageViews: true,
     capturePageLeaves: true,
-    client: true,
-    server: true,
+    client: false,
+    server: false,
     proxy: false,
   },
   setup(options, nuxt) {
