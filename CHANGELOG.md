@@ -1,4 +1,16 @@
 
+## v2.0.7
+
+[compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.6...v2.0.7)
+
+### 🏡 Chore
+
+- Cleanup ([68de5ce](https://github.com/unproducts/nuxt-posthog-2/commit/68de5ce))
+
+### ❤️ Contributors
+
+- Aman Desai <amandesai01@gmail.com>
+
 ## v2.0.6
 
 [compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.5...v2.0.6)

@@ -1,6 +1,6 @@
 {
   "name": "@unproducts/nuxt-posthog",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "PostHog module for nuxt",
   "publishConfig": {
     "access": "public"
