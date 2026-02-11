@@ -4,21 +4,26 @@ import type { JsonType } from 'posthog-js';
 
 export default defineNuxtPlugin({
   name: 'posthog-server',
-  enforce: 'pre',
+  enforce: 'post',
   setup: async () => {
-    const config = useRuntimeConfig().public.posthog;
-    const runtimeConfig = useRuntimeConfig().posthog;
+    const publicConfig = useRuntimeConfig().public.posthog;
 
-    if (!config || !runtimeConfig.server)
+    if (!publicConfig?.client)
       return {
         provide: {
           serverPosthog: null as PostHog | null,
         },
       };
 
+    if (!publicConfig.key || !publicConfig.host) {
+      throw new Error(
+        'PostHog client (SSR) is enabled but key or host not found. Set client to false in module options to disable.'
+      );
+    }
+
     const PostHog = (await import('posthog-node')).PostHog;
 
-    const posthog = new PostHog(config.key, { host: config.host });
+    const posthog = new PostHog(publicConfig.key, { host: publicConfig.host });
     await posthog.reloadFeatureFlags();
 
     const identity = useCookie('ph-identify', { default: () => '' });

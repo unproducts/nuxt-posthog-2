@@ -4,19 +4,23 @@ import { defu } from 'defu';
 
 export default defineNuxtPlugin({
   name: 'posthog',
-  enforce: 'pre',
+  enforce: 'post',
   setup: async () => {
-    console.log('setup posthog client');
-    const runtimeConfig = useRuntimeConfig().posthog;
     const config = useRuntimeConfig().public.posthog;
 
-    if (!config || !runtimeConfig.client)
+    if (!config?.client)
       return {
         provide: {
           posthog: 'Deprecated: use $clientPosthog instead.' as const,
           clientPosthog: null as PostHog | null,
         },
       };
+
+    if (!config.key || !config.host) {
+      throw new Error(
+        'PostHog client is enabled but key or host not found. Set client to false in module options to disable.'
+      );
+    }
 
     const posthog = (await import('posthog-js')).posthog;
 

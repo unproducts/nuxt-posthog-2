@@ -7,7 +7,8 @@ import {
   addServerPlugin,
   addServerImports,
 } from '@nuxt/kit';
-import type { PostHogConfig } from 'posthog-js';
+import type { PostHogConfig as PostHogClientOptions } from 'posthog-js';
+import type { PostHogOptions as PostHogServerOptions } from 'posthog-node';
 import { defu } from 'defu';
 
 export interface ModuleOptions {
@@ -53,15 +54,17 @@ export interface ModuleOptions {
    * @type object
    * @docs https://posthog.com/docs/libraries/js#config
    */
-  clientOptions?: Partial<PostHogConfig>;
+  clientOptions?: Partial<PostHogClientOptions>;
 
   /**
-   * If set to true, the module will be disabled (no events will be sent to PostHog).
-   * This is useful for development environments. Directives and components will still be available for you to use.
-   * @default false
-   * @type boolean
+   * PostHog Server options
+   * @default {
+   *    api_host: process.env.POSTHOG_API_HOST,
+   * }
+   * @type object
+   * @docs https://posthog.com/docs/libraries/node#config
    */
-  disabled?: boolean;
+  serverOptions?: Partial<PostHogServerOptions>;
 
   /**
    * If set to true, the module will be enabled on the client side.
@@ -96,7 +99,6 @@ export default defineNuxtModule<ModuleOptions>({
     host: process.env.POSTHOG_API_HOST as string,
     capturePageViews: true,
     capturePageLeaves: true,
-    disabled: false,
     client: true,
     server: true,
     proxy: false,
@@ -104,36 +106,39 @@ export default defineNuxtModule<ModuleOptions>({
   setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url);
 
-    if (!options.key || !options.host) {
-      options.disabled = true;
-    } else if (!options.disabled) {
-      // Only set runtime config if not disabled
-      nuxt.options.runtimeConfig.public.posthog = defu<ModuleOptions, ModuleOptions[]>(
-        nuxt.options.runtimeConfig.public.posthog,
-        {
-          key: options.key,
-          host: options.host,
-          capturePageViews: options.capturePageViews,
-          capturePageLeaves: options.capturePageLeaves,
-          clientOptions: options.clientOptions,
-          proxy: options.proxy,
-        },
-      );
+    // Single source of truth: key and host only in public config (from env via options or runtimeConfig.public.posthog)
+    const mergedKeyHost = defu(
+      nuxt.options.runtimeConfig.public.posthog,
+      { key: options.key, host: options.host }
+    );
 
-      nuxt.options.runtimeConfig.posthog = defu<
-        Pick<ModuleOptions, 'client' | 'server'>,
-        Pick<ModuleOptions, 'client' | 'server'>[]
-      >(nuxt.options.runtimeConfig.posthog, {
-        client: !!options.client,
-        server: !!options.server,
-      });
+    if (options.server) {
+      // Server-relevant options (private) — Nitro usePostHog reads serverOptions here; key/host from public
+      nuxt.options.runtimeConfig.posthog = {
+        ...nuxt.options.runtimeConfig.posthog,
+        server: true,
+        ...(options.serverOptions && { serverOptions: options.serverOptions }),
+      };
     }
 
-    const config = nuxt.options.runtimeConfig.public.posthog;
+    if (options.client) {
+      // Client-relevant options (public) — client plugins and server plugin read from runtimeConfig.public.posthog
+      nuxt.options.runtimeConfig.public.posthog = {
+        ...nuxt.options.runtimeConfig.public.posthog,
+        key: mergedKeyHost.key,
+        host: mergedKeyHost.host,
+        capturePageViews: options.capturePageViews,
+        capturePageLeaves: options.capturePageLeaves,
+        clientOptions: options.clientOptions,
+        proxy: options.proxy,
+        client: true,
+      };
+    }
 
-    // Setup proxy
-    if (config && config.proxy) {
-      const url = new URL(config.host);
+    // Setup proxy (uses resolved host from public config)
+    const publicPosthog = nuxt.options.runtimeConfig.public.posthog;
+    if (publicPosthog?.proxy && publicPosthog?.host) {
+      const url = new URL(publicPosthog.host);
       const region = url.hostname.split('.')[0];
 
       if (!region) {

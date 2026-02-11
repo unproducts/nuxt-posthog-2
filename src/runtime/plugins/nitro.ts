@@ -5,9 +5,8 @@ import { getCookie } from 'h3';
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook('request', async (event) => {
     const config = useRuntimeConfig().public.posthog;
-    const runtimeConfig = useRuntimeConfig().posthog;
 
-    if (!config || !runtimeConfig.server) return;
+    if (!config?.client) return;
 
     const distinctId = getCookie(event, 'ph-identify');
     event.context.posthogId = distinctId;
