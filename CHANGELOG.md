@@ -1,4 +1,17 @@
 
+## v2.0.6
+
+[compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.5...v2.0.6)
+
+### 🏡 Chore
+
+- Better defaults handling ([c04365a](https://github.com/unproducts/nuxt-posthog-2/commit/c04365a))
+- Better deps ([0ee5b68](https://github.com/unproducts/nuxt-posthog-2/commit/0ee5b68))
+
+### ❤️ Contributors
+
+- Aman Desai <amandesai01@gmail.com>
+
 ## v2.0.5
 
 [compare changes](https://github.com/unproducts/nuxt-posthog-2/compare/v2.0.4...v2.0.5)
